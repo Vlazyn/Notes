@@ -573,6 +573,34 @@
                 renderFeeds();
             }
         }
+        
+         function addNote() {
+         const noteInput = document.getElementById('noteInput');
+         const noteText = noteInput.value.trim();
+    
+         if (noteText === "") {
+        alert("Please write something before pinning!");
+        return;
+         }
+    
+        const newNote = {
+          id: "note_" + Date.now(),
+          text: noteText,
+          timestamp: Date.now(),
+          isFavorite: false,
+          color: getPastelTint(activeThemeColor, 0.85)
+    };
+    
+    boardData['note'].unshift(newNote);
+    
+    // Save and re-render the board
+    saveData();
+    renderFeeds();
+    
+    noteInput.value = "";
+    document.getElementById('noteCount').innerText = "0 / 1000 words";
+    document.getElementById('noteCount').style.color = "gray";
+      }
 
         function deleteNote(noteId) {
             if (confirm("Permanently delete this note?")) {
@@ -657,6 +685,8 @@
                         <span class="note-time live-timestamp" data-time="${note.timestamp}">Just now</span>
                 </div>
             `;
+            
+            targetFeed.appendChild(groupDiv);
         }
         
         function getFormattedTime(timestamp) {
